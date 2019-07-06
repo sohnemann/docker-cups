@@ -1,6 +1,6 @@
 # Base image
 ARG ARCH=amd64
-FROM $ARCH/debian:buster-slim
+FROM $ARCH/debian:buster
 
 # Prepare multi arch build
 COPY qemu-* /usr/bin/
@@ -37,10 +37,11 @@ RUN echo 'print ALL=(ALL:ALL) ALL' >> /etc/sudoers
 RUN /usr/sbin/cupsd \
   && while [ ! -f /var/run/cups/cupsd.pid ]; do sleep 1; done \
   && cupsctl --remote-admin --remote-any --share-printers \
-  && kill $(cat /var/run/cups/cupsd.pid)
+  && kill $(cat /var/run/cups/cupsd.pid) \
+  && echo "ServerAlias *" >> /etc/cups/cupsd.conf
 
 # cleanup
-RUN rm -f /usr/bin/qemu-*-static /app/qemu-*-static
+RUN rm -f /usr/bin/qemu-*-static
 
 # volumes
 VOLUME ["/etc/cups/printers.conf"]
