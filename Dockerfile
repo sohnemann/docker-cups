@@ -2,9 +2,6 @@
 ARG ARCH=amd64
 FROM $ARCH/debian:buster-slim
 
-# Prepare multi arch build
-COPY qemu-* /usr/bin/
-
 # Maintainer
 MAINTAINER Florian Schwab <me@ydkn.io>
 
@@ -39,9 +36,6 @@ RUN /usr/sbin/cupsd \
   && cupsctl --remote-admin --remote-any --share-printers \
   && kill $(cat /var/run/cups/cupsd.pid) \
   && echo "ServerAlias *" >> /etc/cups/cupsd.conf
-
-# cleanup
-RUN rm -f /usr/bin/qemu-*-static
 
 # volumes
 VOLUME ["/etc/cups/printers.conf"]
