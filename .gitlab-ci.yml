@@ -7,7 +7,7 @@ stages:
   - release
 
 variables:
-  QEMU_VERSION: v4.0.0-5
+  QEMU_VERSION: v4.1.0-1
 
 before_script:
   - mkdir -p /root/.docker || true
