@@ -6,52 +6,40 @@ stages:
   - build
   - release
 
-variables:
-  QEMU_VERSION: v4.1.0-1
-
 before_script:
-  - mkdir -p /root/.docker || true
-  - echo '{"experimental":"enabled"}' > /root/.docker/config.json
   - docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
+  - docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
 
 build-amd64:
   stage: build
   script:
-    - wget https://github.com/multiarch/qemu-user-static/releases/download/${QEMU_VERSION}/qemu-x86_64-static -O qemu-x86_64-static
-    - chmod 554 qemu-*-static
-    - docker run --rm --privileged multiarch/qemu-user-static:register --reset
     - docker build --build-arg ARCH=amd64 -t ${CI_REGISTRY_IMAGE}:${CI_PIPELINE_ID}-amd64 .
     - docker push ${CI_REGISTRY_IMAGE}:${CI_PIPELINE_ID}-amd64
 
 build-arm32v6:
   stage: build
   script:
-    - wget https://github.com/multiarch/qemu-user-static/releases/download/${QEMU_VERSION}/qemu-arm-static -O qemu-arm-static
-    - chmod 554 qemu-*-static
-    - docker run --rm --privileged multiarch/qemu-user-static:register --reset
     - docker build --build-arg ARCH=arm32v6 -t ${CI_REGISTRY_IMAGE}:${CI_PIPELINE_ID}-arm32v6 .
     - docker push ${CI_REGISTRY_IMAGE}:${CI_PIPELINE_ID}-arm32v6
 
 build-arm32v7:
   stage: build
   script:
-    - wget https://github.com/multiarch/qemu-user-static/releases/download/${QEMU_VERSION}/qemu-arm-static -O qemu-arm-static
-    - chmod 554 qemu-*-static
-    - docker run --rm --privileged multiarch/qemu-user-static:register --reset
     - docker build --build-arg ARCH=arm32v7 -t ${CI_REGISTRY_IMAGE}:${CI_PIPELINE_ID}-arm32v7 .
     - docker push ${CI_REGISTRY_IMAGE}:${CI_PIPELINE_ID}-arm32v7
 
 build-arm64v8:
   stage: build
   script:
-    - wget https://github.com/multiarch/qemu-user-static/releases/download/${QEMU_VERSION}/qemu-aarch64-static -O qemu-aarch64-static
-    - chmod 554 qemu-*-static
-    - docker run --rm --privileged multiarch/qemu-user-static:register --reset
     - docker build --build-arg ARCH=arm64v8 -t ${CI_REGISTRY_IMAGE}:${CI_PIPELINE_ID}-arm64v8 .
     - docker push ${CI_REGISTRY_IMAGE}:${CI_PIPELINE_ID}-arm64v8
 
 release:
   stage: release
+  before_script:
+    - mkdir -p /root/.docker || true
+    - echo '{"experimental":"enabled"}' > /root/.docker/config.json
+    - docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
   script:
     - docker pull ${CI_REGISTRY_IMAGE}:${CI_PIPELINE_ID}-amd64
     - docker tag ${CI_REGISTRY_IMAGE}:${CI_PIPELINE_ID}-amd64 ${CI_REGISTRY_IMAGE}:latest-amd64
