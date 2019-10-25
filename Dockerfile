@@ -1,6 +1,6 @@
 # Base image
 ARG ARCH=amd64
-FROM $ARCH/debian:buster
+FROM $ARCH/debian:buster-slim
 
 # Prepare multi arch build
 COPY qemu-* /usr/bin/
