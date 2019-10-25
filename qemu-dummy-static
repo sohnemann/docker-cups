@@ -1,3 +1,0 @@
-#!/bin/sh
-
-echo "Dummy QEMU wrapper to allow builds without specifing an architecture."
