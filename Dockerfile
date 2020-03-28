@@ -1,10 +1,10 @@
-# args
+# base image
 ARG ARCH=amd64
+FROM $ARCH/debian:buster-slim
+
+# args
 ARG VCS_REF
 ARG BUILD_DATE
-
-# base image
-FROM $ARCH/debian:buster-slim
 
 # environment
 ENV ADMIN_PASSWORD=admin
