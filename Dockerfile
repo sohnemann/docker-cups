@@ -1,6 +1,6 @@
 # base image
 ARG ARCH=amd64
-FROM $ARCH/debian:buster-slim
+FROM $ARCH/debian:bullseye-slim
 
 # args
 ARG VCS_REF
