@@ -33,6 +33,7 @@ RUN apt-get update \
   hpijs-ppds \
   hp-ppd \
   hplip \
+  printer-driver-cups-pdf \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 
