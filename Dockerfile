@@ -65,7 +65,10 @@ RUN cp -rp /etc/cups /etc/cups-skel
 
 # entrypoint
 ADD docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-ENTRYPOINT [ "docker-entrypoint.sh" ]
+ENTRYPOINT [ "/usr/local/bin/docker-entrypoint.sh" ]
+
+# make entrypoint executable
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 # default command
 CMD ["cupsd", "-f"]
