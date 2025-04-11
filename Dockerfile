@@ -1,6 +1,6 @@
 # base image
 ARG ARCH=amd64
-FROM $ARCH/debian:buster-slim
+FROM $ARCH/debian:bookworm-slim
 
 # args
 ARG VCS_REF
@@ -10,15 +10,15 @@ ARG BUILD_DATE
 ENV ADMIN_PASSWORD=admin
 
 # labels
-LABEL maintainer="Florian Schwab <me@ydkn.io>" \
-  org.label-schema.schema-version="1.0" \
-  org.label-schema.name="ydkn/cups" \
-  org.label-schema.description="Simple CUPS docker image" \
-  org.label-schema.version="0.1" \
-  org.label-schema.url="https://hub.docker.com/r/ydkn/cups" \
-  org.label-schema.vcs-url="https://gitlab.com/ydkn/docker-cups" \
-  org.label-schema.vcs-ref=$VCS_REF \
-  org.label-schema.build-date=$BUILD_DATE
+#LABEL maintainer="Florian Schwab <me@ydkn.io>" \
+#  org.label-schema.schema-version="1.0" \
+#  org.label-schema.name="ydkn/cups" \
+#  org.label-schema.description="Simple CUPS docker image" \
+#  org.label-schema.version="0.1" \
+#  org.label-schema.url="https://hub.docker.com/r/ydkn/cups" \
+#  org.label-schema.vcs-url="https://gitlab.com/ydkn/docker-cups" \
+#  org.label-schema.vcs-ref=$VCS_REF \
+#  org.label-schema.build-date=$BUILD_DATE
 
 # install packages
 RUN apt-get update \
@@ -27,14 +27,22 @@ RUN apt-get update \
   cups \
   cups-bsd \
   cups-filters \
+  curl \
   foomatic-db-compressed-ppds \
   printer-driver-all \
   openprinting-ppds \
   hpijs-ppds \
   hp-ppd \
   hplip \
+  unzip \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
+
+RUN curl -O https://www.sato-global.com/files/Printer_Drivers/SATO_CUPS_Driver/Linux/SATOLinuxDriver_x64.zip \
+    && unzip SATOLinuxDriver_x64.zip \
+    && apt-get install ./satodriver-2.30.0-linux-4.15-x86_64.deb \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # add print user
 RUN adduser --home /home/admin --shell /bin/bash --gecos "admin" --disabled-password admin \
