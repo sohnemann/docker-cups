@@ -11,7 +11,7 @@
 ### Start the container
 
 ```bash
-docker run --container-name cups -d --restart always -p 631:631 -v $(pwd):/etc/cups cups:latest
+docker run --name cups -d --restart always -p 631:631 -v $(pwd):/etc/cups cups:latest
 ```
 
 ### Configuration
@@ -22,5 +22,5 @@ Default credentials: admin / admin
 To change the admin password set the environment variable _ADMIN_PASSWORD_ to your password.
 
 ```bash
-docker run --container-name cups -d --restart always -p 631:631 -v $(pwd):/etc/cups -e ADMIN_PASSWORD=mySecretPassword cups:latest
+docker run --name cups -d --restart always -p 631:631 -v $(pwd):/etc/cups -e ADMIN_PASSWORD=mySecretPassword cups:latest
 ```
